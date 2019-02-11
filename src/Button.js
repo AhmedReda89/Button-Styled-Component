@@ -14,10 +14,10 @@ const H7 = styled.h6`
   text-align: left;
 `;
 
-const Icon = styled.i`
-  width: 20px;
-  height: 20px;
-  background: tomato;
+const Icon = styled.i.attrs({ className: ({ name }) => `lnr lnr-${name}` })`
+  width: 16px;
+  height: 16px;
+  background: transparent;
   display: inline-block;
   ${props =>
     props.left
@@ -31,6 +31,12 @@ const Icon = styled.i`
           margin-left: 10px;
         `
       : null}
+  ${props =>
+    props.right
+      ? css`
+          font-size: 14px !important;
+        `
+      : null}
 `;
 
 const BaseButton = styled.button`
@@ -39,10 +45,12 @@ const BaseButton = styled.button`
   }
   display: inline-block;
   position: relative;
+  vertical-align: middle;
   white-space: nowrap;
-  margin: auto 10px;
+  border-radius: 3px;
+  margin: 6px auto;
   text-align: center;
-  padding: 5px 10px;
+  padding: 0 10px;
   height: 40px;
   font-weight: 500;
   font-size: 12px;
@@ -52,45 +60,58 @@ const BaseButton = styled.button`
    {
     /* Theme */
   }
-  border: none;
-  background-color: #d1d1d1;
-  color: #000;
+  border: 1px solid #d1d1d1;
+  background-color: #fff;
+  > i {
+    color: #ab1a2a;
+    font-size: 17px;
+  }
+  color: #ab1a2a;
   outline: none;
   cursor: pointer;
   border-radius: 5px;
   text-decoration: none;
   ${props =>
-    props.wired
-      ? css`
-          border: 1px #ddd solid;
-          background-color: transparent;
-        `
-      : null}
-  ${props =>
     props.textOnly
       ? css`
           border: none;
           background: transparent;
-          color: tomato;
+          color: #ab1a2a;
+          > i {
+            color: #ab1a2a;
+            font-size: 17px;
+          }
         `
       : null}
   ${props =>
     props.primary
       ? css`
           border: none;
-          background: papayawhip;
-          color: tomato;
+          color: #fff;
+          background: #ab1a2a;
+          > i {
+            color: #fff;
+            font-size: 17px;
+          }
         `
       : null}
 
     > i {
-      border-radius: 10px;
-      background-color:green;
-    }
-  
+    border-radius: 50%;
+    position: relative;
+    top: 2px;
+  }
+  ${props =>
+    props.noLabel
+      ? css`
+          > i {
+            margin: 0;
+          }
+        `
+      : null}
 `;
 
-export function Btn(props) {
+export default function Btn(props) {
   const { label, subLabel, icon, subIcon, children, ...passProps } = props;
   const _subLabel = subLabel ? <H7>{subLabel}</H7> : null;
   const _mainLabel = label ? (
@@ -100,9 +121,9 @@ export function Btn(props) {
   ) : (
     children
   );
-  const _mainIcon = icon ? <Icon left /> : null;
-  const _subIcon = subIcon ? <Icon righ /> : null;
-  console.log("BTN", { label, subLabel, icon, subIcon });
+  const _mainIcon = icon ? <Icon left name={icon} /> : null;
+  const _subIcon = subIcon ? <Icon right name={subIcon} arrow /> : null;
+  //console.log("BTN", { label, subLabel, icon, subIcon });
   return (
     <BaseButton {...passProps}>
       {_mainIcon}

@@ -1,26 +1,42 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Btn } from "./Button";
-import Menu from "./Menu";
+import Btn from "./Button";
+import List from "./Menu";
+import DropDownList from "./DropDownButton";
 
 import "./styles.css";
 
 function App() {
+  const dummyData = ["test1", "test2", "test3", "test4"];
   return (
     <div className="App">
       <h1>Button Styled Component</h1>
-      <button>Normal Button</button>
-      <hr />
-      <Btn primary icon>
+      <Btn primary icon="mustache">
         Our Custom Button
       </Btn>
+      <br />
+      <Btn primary subIcon="chevron-down">
+        Our Custom Button
+      </Btn>
+      <br />
+      <Btn primary icon="mustache" subIcon="chevron-down">
+        Our Custom Button
+      </Btn>
+      <br />
+      <Btn icon="mustache" subIcon="chevron-down">
+        Our Custom Button
+      </Btn>
+      <Btn icon="mustache" noLabel />
       <hr />
-      <Menu>
-        <Menu.Item subIcon>test 2</Menu.Item>
-        <Menu.Item label="Foo" icon>
+      <List>
+        <List.Item subIcon>test 2</List.Item>
+        <List.Item subIcon>test 2</List.Item>
+        <List.Item label="Foo" icon>
           test 1
-        </Menu.Item>
-      </Menu>
+        </List.Item>
+      </List>
+      <hr />
+      <DropDownList menuItems={dummyData} />
     </div>
   );
 }

@@ -1,32 +1,58 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
-import { Btn } from "./Button";
+import Btn from "./Button";
 
-const BaseMenu = styled.ul`
+const BaseList = styled.ul`
   list-style: none;
   padding: 0;
-  background: grey;
+  background: #f9f9f9;
+  ${props =>
+    props.closeMenu
+      ? css`
+          display: none;
+        `
+      : null}
 `;
 
-const BaseMenuItem = styled.li``;
+const BaseListItem = styled.li`
+  &:hover {
+    background-color: #ddd;
+  }
+  a {
+    font-size: 18px;
+    padding: 5px 0;
+    display: inline-block;
+  }
+`;
 
-export default function Menu(props) {
+export default function List(props) {
   const { children, ...passProps } = props;
 
   const childs = React.Children.toArray(children);
 
-  const menuItems = childs.map((item, index) => {
-    return <BaseMenuItem key={index}>{item}</BaseMenuItem>;
+  const listItems = childs.map((item, index) => {
+    let lastItem = index === childs.length ? true : false;
+    return !lastItem ? (
+      <BaseListItem key={index}>
+        {item}
+        <List.Seprator />
+      </BaseListItem>
+    ) : (
+      <BaseListItem key={index}>{item}</BaseListItem>
+    );
   });
 
-  return <BaseMenu {...passProps}>{menuItems}</BaseMenu>;
+  return <BaseList {...passProps}>{listItems}</BaseList>;
 }
 
-Menu.Item = styled(Btn).attrs({
+List.Item = styled(Btn).attrs({
   as: "a",
-  primary: false,
-  wired: true
+  primary: true
 })``;
 
-Menu.Seprator = styled.hr``;
+List.Seprator = styled.hr`
+  margin: 0;
+  border: 0;
+  border-top: 1px #ddd solid;
+`;
