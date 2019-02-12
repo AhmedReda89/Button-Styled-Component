@@ -7,24 +7,21 @@ import DropDownList from "./DropDownButton";
 import "./styles.css";
 
 export class TestComponent extends React.Component {
-  render(dataItem) {
+  render() {
     return (
-      <a className="componentOutput" href={this.props.href} primary>
-        {this.props.label}
+      <a className="componentOutput" href={this.props.currentItem.href} primary>
+        {this.props.currentItem.label}
       </a>
     );
   }
 }
 
-function renderItem(data) {
-  const items = data.map(item => {
-    return (
-      <a className="fnOutput" href={item.href} primary>
-        {item.label}
-      </a>
-    );
-  });
-  return items;
+function renderItem({ currentItem }) {
+  return (
+    <a className="fnOutput" href={currentItem.href} primary>
+      {currentItem.label}
+    </a>
+  );
 }
 
 function App() {
@@ -66,12 +63,14 @@ function App() {
       <DropDownList
         label="Render Function based"
         menuItems={dummyData}
-        menuRender={renderItem}
+        menuItemRender={renderItem}
       />
       <DropDownList
         label="Component based"
+        btnIcon="mustach"
+        btnSubIcon=""
         menuItems={dummyData}
-        menuComponent={TestComponent}
+        menuItemComponent={TestComponent}
       />
     </div>
   );

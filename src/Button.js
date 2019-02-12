@@ -14,7 +14,9 @@ const H7 = styled.h6`
   text-align: left;
 `;
 
-const Icon = styled.i.attrs({ className: ({ name }) => `lnr lnr-${name}` })`
+const _Icon = styled.i.attrs(({ name }) => ({ className: `lnr lnr-${name}` }));
+
+const Icon = _Icon`
   width: 16px;
   height: 16px;
   background: transparent;

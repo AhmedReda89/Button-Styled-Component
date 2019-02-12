@@ -24,6 +24,7 @@ const BaseListItem = styled.li`
     font-size: 18px;
     padding: 5px 0;
     display: inline-block;
+    height: auto;
   }
 `;
 
@@ -47,10 +48,12 @@ export default function List(props) {
   return <BaseList {...passProps}>{listItems}</BaseList>;
 }
 
-List.Item = styled(Btn).attrs({
-  as: "a",
-  primary: true
-})``;
+List.Item = props => {
+  const passProps = { ...props };
+  passProps.primary = false;
+
+  return <Btn {...passProps} as="a" textOnly />;
+};
 
 List.Seprator = styled.hr`
   margin: 0;
