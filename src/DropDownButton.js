@@ -45,7 +45,7 @@ export default class DropDownList extends React.Component {
             ) {
               let items = incomingItems.map(item => {
                 return (
-                  <List.Item className="defaultOuput" href={item.href} primary>
+                  <List.Item className="defaultOuput" href={item.href}>
                     {item.label}
                   </List.Item>
                 );
@@ -61,7 +61,6 @@ export default class DropDownList extends React.Component {
                     className="defaultOuput"
                     href={item.href}
                     label={item.label}
-                    primary
                   />
                 );
               });
