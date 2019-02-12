@@ -7,7 +7,6 @@ import "./styles.css";
 
 const BaseDDList = styled.div`
   padding: 10px;
-  background: #f9f9f9;
   display: inline-block;
 `;
 export default class DropDownList extends React.Component {
@@ -30,7 +29,7 @@ export default class DropDownList extends React.Component {
             this.setState(state => ({ isClosed: !state.isClosed }))
           }
         >
-          Text Only Button
+          {this.props.label}
         </Btn>
         <List closeMenu={this.state.isClosed}>
           <List.Item primary>test properties</List.Item>

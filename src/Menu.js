@@ -5,7 +5,8 @@ import Btn from "./Button";
 
 const BaseList = styled.ul`
   list-style: none;
-  padding: 0;
+  padding: 10px 0;
+  margin: 0;
   background: #f9f9f9;
   ${props =>
     props.closeMenu
