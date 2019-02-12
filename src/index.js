@@ -6,25 +6,51 @@ import DropDownList from "./DropDownButton";
 
 import "./styles.css";
 
+export class TestComponent extends React.Component {
+  render(dataItem) {
+    return (
+      <a className="componentOutput" href={this.props.href} primary>
+        {this.props.label}
+      </a>
+    );
+  }
+}
+
+function renderItem(data) {
+  const items = data.map(item => {
+    return (
+      <a className="fnOutput" href={item.href} primary>
+        {item.label}
+      </a>
+    );
+  });
+  return items;
+}
+
 function App() {
-  const dummyData = ["test1", "test2", "test3", "test4"];
+  const dummyData = [
+    { label: "test 1", href: "#" },
+    { label: "test 2", href: "#" },
+    { label: "test 3", href: "#" },
+    { label: "test 4", href: "#" }
+  ];
   return (
     <div className="App">
       <h1>Button Styled Component</h1>
       <Btn primary icon="mustache">
-        Our Custom Button
+        Primary Button
       </Btn>
       <br />
       <Btn primary subIcon="chevron-down">
-        Our Custom Button
+        Primary Button
       </Btn>
       <br />
       <Btn primary icon="mustache" subIcon="chevron-down">
-        Our Custom Button
+        Primary Button
       </Btn>
       <br />
       <Btn icon="mustache" subIcon="chevron-down">
-        Our Custom Button
+        Default Button
       </Btn>
       <Btn icon="mustache" noLabel />
       <hr />
@@ -36,7 +62,17 @@ function App() {
         </List.Item>
       </List>
       <hr />
-      <DropDownList menuItems={dummyData} />
+      <DropDownList label="Default" menuItems={dummyData} />
+      <DropDownList
+        label="Render Function based"
+        menuItems={dummyData}
+        menuRender={renderItem}
+      />
+      <DropDownList
+        label="Component based"
+        menuItems={dummyData}
+        menuComponent={TestComponent}
+      />
     </div>
   );
 }

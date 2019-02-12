@@ -30,18 +30,44 @@ export default class DropDownList extends React.Component {
             this.setState(state => ({ isClosed: !state.isClosed }))
           }
         >
-          List Button
+          Text Only Button
         </Btn>
         <List closeMenu={this.state.isClosed}>
           <List.Item primary>test properties</List.Item>
-          {this.props.menuItems.map((item, index) => {
-            //console.log("Item: ", item);
-            return (
-              <List.Item key={index} primary>
-                {item}
-              </List.Item>
-            );
-          })}
+          {(() => {
+            const incomingItems = this.props.menuItems;
+            const menuRender = this.props.menuRender;
+            const menuComponent = this.props.menuComponent;
+            if (
+              typeof incomingItems === "object" &&
+              !menuRender &&
+              !menuComponent
+            ) {
+              let items = incomingItems.map(item => {
+                return (
+                  <List.Item className="defaultOuput" href={item.href} primary>
+                    {item.label}
+                  </List.Item>
+                );
+              });
+              return items;
+            } else if (menuRender) {
+              return menuRender(incomingItems);
+            } else if (menuComponent) {
+              const PassedComponent = menuComponent;
+              let items = incomingItems.map(item => {
+                return (
+                  <PassedComponent
+                    className="defaultOuput"
+                    href={item.href}
+                    label={item.label}
+                    primary
+                  />
+                );
+              });
+              return items;
+            }
+          })()}
         </List>
       </BaseDDList>
     );
