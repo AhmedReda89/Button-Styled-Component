@@ -13,7 +13,6 @@ const BaseDDList = styled.div`
   ul {
     position: absolute;
     left: 0;
-
     li {
       padding-left: 10px;
       padding-right: 10px;
@@ -76,9 +75,11 @@ export default class DropDownList extends React.Component {
 
     if (renderLTR) {
       this.listRef.current.style.left = triggerViewportOffset.left + "px";
+      this.listRef.current.style.right = "auto";
     } else {
-      this.listRef.current.style.left =
-        triggerViewportOffset.left + triggWidth + "px";
+      this.listRef.current.style.right =
+        window.innerWidth - (triggerViewportOffset.left + triggWidth) + "px";
+      this.listRef.current.style.left = "auto";
     }
   }
 

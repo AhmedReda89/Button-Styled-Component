@@ -5,7 +5,7 @@ import Btn from "./Button";
 
 const BaseList = styled.ul`
   list-style: none;
-  padding: 10px 0;
+  padding: 0;
   margin: 0;
   background: #f9f9f9;
   ${props =>
@@ -22,7 +22,7 @@ const BaseListItem = styled.li`
   }
   a {
     font-size: 18px;
-    padding: 5px 0;
+    padding: 5px 15px;
     display: inline-block;
     height: auto;
   }

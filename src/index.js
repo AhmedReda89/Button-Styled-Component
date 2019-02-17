@@ -27,13 +27,14 @@ function renderItem({ currentItem, currentItemIndex }) {
 function App() {
   const dummyData = [
     { label: "test 1", href: "#" },
-    { label: "test 2", href: "#" },
+    { label: "test 2 a little longer", href: "#" },
     { label: "test 3", href: "#" },
-    { label: "test 4", href: "#" }
+    { label: "test 4 is much more longer than other items", href: "#" }
   ];
   return (
     <div className="App">
-      <h1>Button Styled Component</h1>
+      <h1>Buttons and DDL Components</h1>
+      <p className="muted-text">Styled components</p>
       <DropDownList label="Default" menuItems={dummyData} />
       <DropDownList
         label="Render Function based"
@@ -50,6 +51,7 @@ function App() {
       <Btn primary icon="mustache">
         Primary Button
       </Btn>
+      <Btn>Default Button</Btn>
       <br />
       <Btn primary icon="mustache" subIcon="chevron-down">
         Primary Button
