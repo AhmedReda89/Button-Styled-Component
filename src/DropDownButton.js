@@ -36,32 +36,61 @@ export default class DropDownList extends React.Component {
     this.state = {
       disabled: props.disabled,
       menuItems: Array.isArray(props.menuItems) ? props.menuItems : [],
-      isClosed: true,
-      renderDown: undefined,
-      renderLTR: undefined
+      isClosed: true
     };
   }
 
+  // twoInOne() {
+  //   const offHeight = this.listRef.current.offsetHeight;
+  //   const offWidth = this.listRef.current.offsetWidth;
+  //   const triggerViewportOffset = this.triggerRef.current.getBoundingClientRect();
+
+  //   const renderDown =
+  //     offHeight < window.innerHeight - triggerViewportOffset.top;
+  //   const renderLTR = offWidth < window.innerWidth - triggerViewportOffset.left;
+
+  //   const {
+  //     offsetHeight: triggHeight,
+  //     offsetWidth: triggWidth
+  //   } = this.triggerRef.current;
+
+  //   const { offsetHeight: listHeight } = this.listRef.current;
+
+  //   this.listRef.current.style.minWidth = triggWidth + "px";
+
+  //   if (renderDown) {
+  //     this.listRef.current.style.top =
+  //       triggHeight + triggerViewportOffset.top + "px";
+  //   } else {
+  //     this.listRef.current.style.top =
+  //       triggerViewportOffset.top - listHeight + "px";
+  //   }
+
+  //   if (renderLTR) {
+  //     this.listRef.current.style.left = triggerViewportOffset.left + "px";
+  //   } else {
+  //     this.listRef.current.style.left =
+  //       triggerViewportOffset.left + triggWidth + "px";
+  //   }
+  // }
+
   getElementRenderDirections() {
-    this.setState(state => {
-      const offHeight = this.listRef.current.offsetHeight;
-      const offWidth = this.listRef.current.offsetWidth;
-      const triggerViewportOffset = this.triggerRef.current.getBoundingClientRect();
+    const offHeight = this.listRef.current.offsetHeight;
+    const offWidth = this.listRef.current.offsetWidth;
+    const triggerViewportOffset = this.triggerRef.current.getBoundingClientRect();
 
-      const renderDown =
-        offHeight < window.innerHeight - triggerViewportOffset.top;
-      const renderLTR =
-        offWidth < window.innerWidth - triggerViewportOffset.left;
+    const renderDown =
+      offHeight < window.innerHeight - triggerViewportOffset.top;
+    const renderLTR = offWidth < window.innerWidth - triggerViewportOffset.left;
 
-      return {
-        renderDown: renderDown,
-        renderLTR: renderLTR
-      };
-    }, this.updateListStylesWithDirections());
+    return {
+      renderDown: renderDown,
+      renderLTR: renderLTR
+    };
   }
 
-  updateListStylesWithDirections() {
-    console.log("call back for get elementRnderDirections");
+  updateListStylesWithDirections(obj) {
+    const { renderDown, renderLTR } = obj;
     const triggerViewportOffset = this.triggerRef.current.getBoundingClientRect();
     const {
       offsetHeight: triggHeight,
@@ -72,15 +101,15 @@ export default class DropDownList extends React.Component {
 
     this.listRef.current.style.minWidth = triggWidth + "px";
 
-    if (this.state.renderDown) {
+    if (renderDown) {
       this.listRef.current.style.top =
-        triggHeight + triggerViewportOffset.top + "px";
+        triggHeight + triggerViewportOffset.top - window.scrollY + "px";
     } else {
       this.listRef.current.style.top =
-        triggerViewportOffset.top + triggHeight - listHeight + "px";
+        triggerViewportOffset.top - listHeight + window.scrollY + "px";
     }
 
-    if (this.state.renderLTR) {
+    if (renderLTR) {
       this.listRef.current.style.left = triggerViewportOffset.left + "px";
     } else {
       this.listRef.current.style.left =
@@ -97,7 +126,9 @@ export default class DropDownList extends React.Component {
       () => {
         if (!this.state.isClosed) {
           this.listRef.current.style.opacity = "0";
-          this.getElementRenderDirections();
+          this.updateListStylesWithDirections(
+            this.getElementRenderDirections()
+          );
           this.listRef.current.style.opacity = "1";
         }
       }
@@ -230,7 +261,6 @@ export default class DropDownList extends React.Component {
         className="drop-down-list"
         closeMenu={this.state.isClosed}
       >
-        <List.Item primary>test properties</List.Item>
         {this.renderMenuItems()}
       </DDList>
     );

@@ -46,11 +46,8 @@ function App() {
         menuItems={dummyData}
         menuItemComponent={TestComponent}
       />
-      <Btn primary icon="mustache">
-        Primary Button
-      </Btn>
       <br />
-      <Btn primary subIcon="chevron-down">
+      <Btn primary icon="mustache">
         Primary Button
       </Btn>
       <br />
@@ -62,6 +59,8 @@ function App() {
         Default Button
       </Btn>
       <Btn icon="mustache" noLabel />
+      <br />
+      <Btn textOnly>Text Only</Btn>
       <hr />
       <List>
         <List.Item>test 2</List.Item>
