@@ -29,13 +29,28 @@ export default class DropDownList extends React.Component {
 
   constructor(props) {
     super(props);
-    this.listRef = React.createRef();
+    this.wrapRef = React.createRef();
     this.triggerRef = React.createRef();
+    this.listRef = React.createRef();
     this.state = {
       disabled: props.disabled,
       menuItems: Array.isArray(props.menuItems) ? props.menuItems : [],
       isClosed: true
     };
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener("mousedown", this.handleClickOutside, false);
+  }
+
+  handleClickOutside(event) {
+    if (this.state.isClosed || this.wrapRef.current.contains(event.target)) {
+      return;
+    }
+    this.setState(state => {
+      return { isClosed: true };
+    });
   }
 
   getElementRenderDirections() {
@@ -235,7 +250,7 @@ export default class DropDownList extends React.Component {
   render() {
     let DDLsWrapper = document.getElementById("DDLsWrapper");
     return (
-      <BaseDDList>
+      <BaseDDList ref={this.wrapRef}>
         {this.renderMenuTrigger()}
         {ReactDOM.createPortal(this.renderMenu(), DDLsWrapper)}
       </BaseDDList>
