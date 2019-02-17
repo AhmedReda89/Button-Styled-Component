@@ -23,7 +23,6 @@ const BaseDDList = styled.div`
 
 const DDList = styled(List)`
   position: absolute;
-  border: 2px purple solid;
 `;
 
 export default class DropDownList extends React.Component {
@@ -39,40 +38,6 @@ export default class DropDownList extends React.Component {
       isClosed: true
     };
   }
-
-  // twoInOne() {
-  //   const offHeight = this.listRef.current.offsetHeight;
-  //   const offWidth = this.listRef.current.offsetWidth;
-  //   const triggerViewportOffset = this.triggerRef.current.getBoundingClientRect();
-
-  //   const renderDown =
-  //     offHeight < window.innerHeight - triggerViewportOffset.top;
-  //   const renderLTR = offWidth < window.innerWidth - triggerViewportOffset.left;
-
-  //   const {
-  //     offsetHeight: triggHeight,
-  //     offsetWidth: triggWidth
-  //   } = this.triggerRef.current;
-
-  //   const { offsetHeight: listHeight } = this.listRef.current;
-
-  //   this.listRef.current.style.minWidth = triggWidth + "px";
-
-  //   if (renderDown) {
-  //     this.listRef.current.style.top =
-  //       triggHeight + triggerViewportOffset.top + "px";
-  //   } else {
-  //     this.listRef.current.style.top =
-  //       triggerViewportOffset.top - listHeight + "px";
-  //   }
-
-  //   if (renderLTR) {
-  //     this.listRef.current.style.left = triggerViewportOffset.left + "px";
-  //   } else {
-  //     this.listRef.current.style.left =
-  //       triggerViewportOffset.left + triggWidth + "px";
-  //   }
-  // }
 
   getElementRenderDirections() {
     const offHeight = this.listRef.current.offsetHeight;
