@@ -113,7 +113,7 @@ const BaseButton = styled.button`
       : null}
 `;
 
-export default function Btn(props) {
+export default React.forwardRef(function Btn(props, ref) {
   const { label, subLabel, icon, subIcon, children, ...passProps } = props;
   const _subLabel = subLabel ? <H7>{subLabel}</H7> : null;
   const _mainLabel = label ? (
@@ -127,10 +127,10 @@ export default function Btn(props) {
   const _subIcon = subIcon ? <Icon right name={subIcon} arrow /> : null;
   //console.log("BTN", { label, subLabel, icon, subIcon });
   return (
-    <BaseButton {...passProps}>
+    <BaseButton ref={ref} {...passProps}>
       {_mainIcon}
       {_mainLabel}
       {_subIcon}
     </BaseButton>
   );
-}
+});

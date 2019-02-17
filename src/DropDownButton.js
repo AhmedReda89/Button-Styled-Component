@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import styled from "styled-components";
 import Btn from "./Button";
 import List from "./Menu";
@@ -8,10 +9,21 @@ import "./styles.css";
 const BaseDDList = styled.div`
   padding: 10px;
   display: inline-block;
-  li {
-    padding-left: 10px;
-    padding-right: 10px;
+  position: relative;
+  ul {
+    position: absolute;
+    left: 0;
+
+    li {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
   }
+`;
+
+const DDList = styled(List)`
+  position: absolute;
+  border: 2px purple solid;
 `;
 
 export default class DropDownList extends React.Component {
@@ -19,13 +31,78 @@ export default class DropDownList extends React.Component {
 
   constructor(props) {
     super(props);
-
+    this.listRef = React.createRef();
+    this.triggerRef = React.createRef();
     this.state = {
       disabled: props.disabled,
       menuItems: Array.isArray(props.menuItems) ? props.menuItems : [],
-      isClosed: true
+      isClosed: true,
+      renderDown: undefined,
+      renderLTR: undefined
     };
   }
+
+  getElementRenderDirections() {
+    this.setState(state => {
+      const offHeight = this.listRef.current.offsetHeight;
+      const offWidth = this.listRef.current.offsetWidth;
+      const triggerViewportOffset = this.triggerRef.current.getBoundingClientRect();
+
+      const renderDown =
+        offHeight < window.innerHeight - triggerViewportOffset.top;
+      const renderLTR =
+        offWidth < window.innerWidth - triggerViewportOffset.left;
+
+      return {
+        renderDown: renderDown,
+        renderLTR: renderLTR
+      };
+    }, this.updateListStylesWithDirections());
+  }
+
+  updateListStylesWithDirections() {
+    console.log("call back for get elementRnderDirections");
+    const triggerViewportOffset = this.triggerRef.current.getBoundingClientRect();
+    const {
+      offsetHeight: triggHeight,
+      offsetWidth: triggWidth
+    } = this.triggerRef.current;
+
+    const { offsetHeight: listHeight } = this.listRef.current;
+
+    this.listRef.current.style.minWidth = triggWidth + "px";
+
+    if (this.state.renderDown) {
+      this.listRef.current.style.top =
+        triggHeight + triggerViewportOffset.top + "px";
+    } else {
+      this.listRef.current.style.top =
+        triggerViewportOffset.top + triggHeight - listHeight + "px";
+    }
+
+    if (this.state.renderLTR) {
+      this.listRef.current.style.left = triggerViewportOffset.left + "px";
+    } else {
+      this.listRef.current.style.left =
+        triggerViewportOffset.left + triggWidth + "px";
+    }
+  }
+
+  handleToggleMenu = () => {
+    //debugger;
+    this.setState(
+      state => {
+        return { isClosed: !state.isClosed };
+      },
+      () => {
+        if (!this.state.isClosed) {
+          this.listRef.current.style.opacity = "0";
+          this.getElementRenderDirections();
+          this.listRef.current.style.opacity = "1";
+        }
+      }
+    );
+  };
 
   UNSAFE_componentWillReceiveProps() {
     this.setState((prvState, props) => {
@@ -38,13 +115,10 @@ export default class DropDownList extends React.Component {
     });
   }
 
-  handleToggleMenu = () => {
-    this.setState(state => ({ isClosed: !state.isClosed }));
-  };
-
   renderMenuTrigger() {
     return (
       <Btn
+        ref={this.triggerRef}
         textOnly
         icon="mustache"
         subIcon="chevron-down"
@@ -63,11 +137,12 @@ export default class DropDownList extends React.Component {
     );
   }
 
-  getMenuItemRenderPropsArgs(currentItem) {
+  getMenuItemRenderPropsArgs(currentItem, currentItemIndex) {
     const { menuItems, isClosed } = this.state;
 
     return {
       currentItem,
+      currentItemIndex,
       menuItems,
       isClosed
     };
@@ -93,9 +168,9 @@ export default class DropDownList extends React.Component {
     }
 
     const { menuItems } = this.state;
-    let items = menuItems.map(item => {
+    let items = menuItems.map((item, index) => {
       return (
-        <List.Item className="defaultOuput" href={item.href}>
+        <List.Item key={index} className="defaultOuput" href={item.href}>
           {item.label}
         </List.Item>
       );
@@ -114,8 +189,8 @@ export default class DropDownList extends React.Component {
       return null;
     }
 
-    return menuItems.map(item => {
-      return menuItemRender(this.getMenuItemRenderPropsArgs(item));
+    return menuItems.map((item, index) => {
+      return menuItemRender(this.getMenuItemRenderPropsArgs(item, index));
     });
   }
 
@@ -129,10 +204,11 @@ export default class DropDownList extends React.Component {
       return null;
     }
 
-    return menuItems.map(item => {
+    return menuItems.map((item, index) => {
       return (
         <MenuItemComponent
           className="componentOuput"
+          key={index}
           href={item.href}
           label={item.label}
           {...this.getMenuItemRenderComponentProps(item)}
@@ -149,18 +225,23 @@ export default class DropDownList extends React.Component {
     }
 
     return (
-      <List closeMenu={this.state.isClosed}>
+      <DDList
+        ref={this.listRef}
+        className="drop-down-list"
+        closeMenu={this.state.isClosed}
+      >
         <List.Item primary>test properties</List.Item>
         {this.renderMenuItems()}
-      </List>
+      </DDList>
     );
   }
 
   render() {
+    let DDLsWrapper = document.getElementById("DDLsWrapper");
     return (
       <BaseDDList>
         {this.renderMenuTrigger()}
-        {this.renderMenu()}
+        {ReactDOM.createPortal(this.renderMenu(), DDLsWrapper)}
       </BaseDDList>
     );
   }

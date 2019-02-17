@@ -28,7 +28,7 @@ const BaseListItem = styled.li`
   }
 `;
 
-export default function List(props) {
+const List = React.forwardRef((props, ref) => {
   const { children, ...passProps } = props;
 
   const childs = React.Children.toArray(children);
@@ -45,8 +45,12 @@ export default function List(props) {
     );
   });
 
-  return <BaseList {...passProps}>{listItems}</BaseList>;
-}
+  return (
+    <BaseList ref={ref} {...passProps}>
+      {listItems}
+    </BaseList>
+  );
+});
 
 List.Item = props => {
   const passProps = { ...props };
@@ -60,3 +64,5 @@ List.Seprator = styled.hr`
   border: 0;
   border-top: 1px #ddd solid;
 `;
+
+export default List;

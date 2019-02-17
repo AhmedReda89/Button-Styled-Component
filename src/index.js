@@ -9,16 +9,16 @@ import "./styles.css";
 export class TestComponent extends React.Component {
   render() {
     return (
-      <a className="componentOutput" href={this.props.currentItem.href} primary>
+      <a className="componentOutput" href={this.props.currentItem.href}>
         {this.props.currentItem.label}
       </a>
     );
   }
 }
 
-function renderItem({ currentItem }) {
+function renderItem({ currentItem, currentItemIndex }) {
   return (
-    <a className="fnOutput" href={currentItem.href} primary>
+    <a className="fnOutput" key={currentItemIndex} href={currentItem.href}>
       {currentItem.label}
     </a>
   );
@@ -34,6 +34,18 @@ function App() {
   return (
     <div className="App">
       <h1>Button Styled Component</h1>
+      <DropDownList label="Default" menuItems={dummyData} />
+      <DropDownList
+        label="Render Function based"
+        menuItems={dummyData}
+        menuItemRender={renderItem}
+      />
+      <DropDownList
+        label="Component based"
+        btnIcon="mustach"
+        menuItems={dummyData}
+        menuItemComponent={TestComponent}
+      />
       <Btn primary icon="mustache">
         Primary Button
       </Btn>
@@ -52,11 +64,9 @@ function App() {
       <Btn icon="mustache" noLabel />
       <hr />
       <List>
-        <List.Item subIcon>test 2</List.Item>
-        <List.Item subIcon>test 2</List.Item>
-        <List.Item label="Foo" icon>
-          test 1
-        </List.Item>
+        <List.Item>test 2</List.Item>
+        <List.Item>test 2</List.Item>
+        <List.Item label="Foo">test 1</List.Item>
       </List>
       <hr />
       <DropDownList label="Default" menuItems={dummyData} />
@@ -68,7 +78,6 @@ function App() {
       <DropDownList
         label="Component based"
         btnIcon="mustach"
-        btnSubIcon=""
         menuItems={dummyData}
         menuItemComponent={TestComponent}
       />
